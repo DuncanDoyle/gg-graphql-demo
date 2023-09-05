@@ -1,0 +1,22 @@
+
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: ApiDoc
+metadata:
+  name: ratings-sdl
+  namespace: bookinfo
+spec:
+  graphql:
+    schemaDefinition: |-
+      type Query {
+        """Ratings"""
+        ratings(id: String!): [Rating] 
+        GetRatings(id: String!): [Rating] 
+        
+      }
+      """A book rating"""
+      type Rating {
+          """Name of the user peforming the rating"""
+          reviewer: String
+          """Number of stars for this rating"""
+          numStars: Int
+      }

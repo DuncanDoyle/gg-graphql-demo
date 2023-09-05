@@ -1,0 +1,33 @@
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: GraphQLStitchedSchema
+metadata:
+  name: bookinfo-graphql-stitchedschema
+  namespace: bookinfo
+spec:
+  options:
+    enableIntrospection: true
+  subschemas:
+  - schema:
+      name: products-graphql-schema
+      namespace: bookinfo
+      clusterName: gg-demo-single
+  - schema:
+      name: ratings-graphql-schema
+      namespace: bookinfo
+      clusterName: gg-demo-single
+    typeMerge:
+      Ratings:
+        args:
+          id: id
+        queryName: GetRatings
+        selectionSet: '{ id }'
+  - schema:
+      name: reviews-graphql-schema
+      namespace: bookinfo
+      clusterName: gg-demo-single
+    typeMerge:
+      Reviews:
+        args:
+          id: id
+        queryName: GetReviews
+        selectionSet: '{ id }'

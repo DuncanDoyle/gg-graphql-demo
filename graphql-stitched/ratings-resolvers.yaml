@@ -1,0 +1,50 @@
+
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: GraphQLResolverMap
+metadata:
+  name: ratings-resolvers
+  namespace: bookinfo
+spec:
+  types:
+    Query:
+      fields:
+        ratings:
+          variables:
+            ratingId:
+              graphqlArg: id
+            resolverResultVar:
+              resolverResult: {}
+          resolvers:
+          - restResolver:
+              destinations:
+              - port:
+                  number: 9080
+                ref:
+                  name: ratings
+                  namespace: bookinfo
+              request:
+                headers:
+                  :path:
+                    jq: '"/ratings/" + .ratingId'
+            resolverResultTransform:
+              jq: '.resolverResultVar.ratings | to_entries | map(.reviewer=.key | .numStars=.value | del(.key,.value))'
+        GetRatings:
+          variables:
+            ratingId:
+              graphqlArg: id
+            resolverResultVar:
+              resolverResult: {}
+          resolvers:
+          - restResolver:
+              destinations:
+              - port:
+                  number: 9080
+                ref:
+                  name: ratings
+                  namespace: bookinfo
+              request:
+                headers:
+                  :path:
+                    jq: '"/ratings/" + .ratingId'
+            resolverResultTransform:
+              jq: '.resolverResultVar.ratings | to_entries | map(.reviewer=.key | .numStars=.value | del(.key,.value))'      

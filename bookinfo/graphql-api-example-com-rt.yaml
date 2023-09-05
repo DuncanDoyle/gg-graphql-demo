@@ -1,0 +1,77 @@
+apiVersion: networking.gloo.solo.io/v2
+kind: RouteTable
+metadata:
+  name: graphql-api-example-com-rt
+  namespace: gloo-mesh-gateways
+  labels:
+     portal: dev-portal
+     api: bookinfo
+spec:
+  hosts:
+  - graphql.api.example.com
+  virtualGateways:
+  - name: istio-ingressgateway
+    namespace: gloo-mesh-gateways
+  portalMetadata:
+    apiProductId: GraphQL APIs
+    apiVersion: "1.0"
+    title: Bookinfo REST API
+    description: Totally awesome API for all things books!
+    contact: bookstore-support@solo.io
+  http:
+  - name: bookinfo-graphql
+    labels:
+      graphql: "true"
+    matchers:
+    - uri:
+        prefix: /bookinfo-graphql
+    graphql:
+      schema:
+        name: bookinfo-graphql-schema
+        namespace: bookinfo
+        clusterName: gg-demo-single
+  - name: bookinfo-graphql-stitched
+    labels: 
+      graphql: "true"
+    matchers:
+    - uri:
+        prefix: /bookinfo-graphql-stitched
+    graphql:
+      stitchedSchema:
+        name: bookinfo-graphql-stitchedschema
+        namespace: bookinfo
+        clusterName: gg-demo-single
+    
+  - name: reviews-graphql
+    labels:
+      graphql: "true"
+    matchers:
+    - uri:
+        prefix: /reviews-graphql
+    graphql:
+      schema:
+        name: reviews-graphql-schema
+        namespace: bookinfo
+        clusterName: gg-demo-single
+  - name: ratings-graphql
+    labels:
+      graphql: "true"
+    matchers:
+    - uri:
+        prefix: /ratings-graphql
+    graphql:
+      schema:
+        name: ratings-graphql-schema
+        namespace: bookinfo
+        clusterName: gg-demo-single
+  - name: products-graphql
+    labels:
+      graphql: "true"
+    matchers:
+    - uri:
+        prefix: /products-graphql
+    graphql:
+      schema:
+        name: products-graphql-schema
+        namespace: bookinfo
+        clusterName: gg-demo-single

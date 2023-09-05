@@ -1,0 +1,77 @@
+apiVersion: networking.gloo.solo.io/v2
+kind: RouteTable
+metadata:
+  name: bookinfo-rt
+  namespace: gloo-mesh-gateways
+  labels:
+     portal: dev-portal
+     api: bookinfo
+spec:
+  hosts:
+  - api.example.com
+  virtualGateways:
+  - name: istio-ingressgateway
+    namespace: gloo-mesh-gateways
+  portalMetadata:
+    apiProductId: Bookinfo
+    apiVersion: "1.0"
+    title: Bookinfo REST API
+    description: Totally awesome API for all things books!
+    contact: bookstore-support@solo.io
+  http:
+  - name: details-api
+    labels:
+      usagePlans: dev-portal
+      cors-policy: api
+    matchers:
+    - uri:
+        prefix: /details
+    forwardTo:
+      # pathRewrite: /
+      destinations:
+      - ref:
+          name: details
+          namespace: bookinfo
+        port:
+          number: 9080
+  - name: ratings-api
+    labels:
+      usagePlans: dev-portal
+      cors-policy: api
+    matchers:
+    - uri:
+        prefix: /ratings
+    forwardTo:
+      # pathRewrite: /
+      destinations:
+      - ref:
+          name: ratings
+          namespace: bookinfo
+        port:
+          number: 9080
+  - name: reviews-api
+    labels:
+      usagePlans: dev-portal
+      cors-policy: api
+    matchers:
+    - uri:
+        prefix: /reviews
+    forwardTo:
+      # pathRewrite: /
+      destinations:
+      - ref:
+          name: reviews
+          namespace: bookinfo
+        port:
+          number: 9080
+  - name: bookinfo-graphql
+    labels:
+      graphql: "true"
+    matchers:
+    - uri:
+        prefix: /bookinfo-graphql
+    graphql:
+      schema:
+        name: bookinfo-graphql-schema
+        namespace: bookinfo
+        clusterName: gg-demo-single

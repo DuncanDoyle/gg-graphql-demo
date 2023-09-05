@@ -1,0 +1,45 @@
+apiVersion: networking.gloo.solo.io/v2
+kind: RouteTable
+metadata:
+  name: productpage-rt
+  namespace: gloo-mesh-gateways
+  labels:
+     portal: dev-portal
+     api: bookinfo
+spec:
+  hosts:
+  - productpage.example.com
+  virtualGateways:
+  - name: istio-ingressgateway
+    namespace: gloo-mesh-gateways
+  http:
+  - name: productpage
+    labels:
+      usagePlans: dev-portal
+      cors-policy: api
+    matchers:
+    - uri:
+        prefix: /
+    forwardTo:
+      # pathRewrite: /
+      destinations:
+      - ref:
+          name: productpage
+          namespace: bookinfo
+        port:
+          number: 9080
+  # - name: productpage-static
+  #   labels:
+  #     usagePlans: dev-portal
+  #     cors-policy: api
+  #   matchers:
+  #   - uri:
+  #       prefix: /static
+  #   forwardTo:
+  #     # pathRewrite: /
+  #     destinations:
+  #     - ref:
+  #         name: productpage
+  #         namespace: bookinfo
+  #       port:
+  #         number: 9080

@@ -1,0 +1,18 @@
+
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: GraphQLSchema
+metadata:
+  name: reviews-graphql-schema
+  namespace: bookinfo
+spec:
+  resolved:
+    options: 
+      enableIntrospection: true
+    resolverMapRefs:
+    - name: reviews-resolvers
+      namespace: bookinfo
+      clusterName: gg-demo-single
+  schemaRef:
+    name: reviews-sdl
+    namespace: bookinfo
+    clusterName: gg-demo-single

@@ -1,0 +1,50 @@
+
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: GraphQLResolverMap
+metadata:
+  name: reviews-resolvers
+  namespace: bookinfo
+spec:
+  types:
+    Query:
+      fields:
+        reviews:
+          resolvers:
+          - restResolver:
+              destinations:
+              - port:
+                  number: 9080
+                ref:
+                  name: reviews
+                  namespace: bookinfo
+              request:
+                headers:
+                  :path:
+                    jq: '"/reviews/" + .reviewId'
+            resolverResultTransform:
+              jq: '.resolverResultVar.reviews'
+          variables:
+            reviewId:
+              graphqlArg: id
+            resolverResultVar:
+              resolverResult: {}
+        GetReviews:
+          resolvers:
+          - restResolver:
+              destinations:
+              - port:
+                  number: 9080
+                ref:
+                  name: reviews
+                  namespace: bookinfo
+              request:
+                headers:
+                  :path:
+                    jq: '"/reviews/" + .reviewId'
+            resolverResultTransform:
+              jq: '.resolverResultVar.reviews'
+          variables:
+            reviewId:
+              graphqlArg: id
+            resolverResultVar:
+              resolverResult: {}
