@@ -1,0 +1,48 @@
+apiVersion: networking.gloo.solo.io/v2
+kind: RouteTable
+metadata:
+  name: graphql-api-example-com-rt
+  namespace: gloo-mesh-gateways
+  labels:
+     portal: dev-portal
+     api: bookinfo-graphql
+spec:
+  hosts:
+  - graphql.api.example.com
+  virtualGateways:
+  - name: istio-ingressgateway
+    namespace: gloo-mesh-gateways
+  portalMetadata:
+    apiProductId: GraphQL APIs
+    apiVersion: "1.0"
+    title: Bookinfo REST API
+    description: Totally awesome API for all things books!
+    contact: bookstore-support@solo.io
+  http:
+  # - name: bookinfo-graphql
+  #   labels:
+  #     graphql: "true"
+  #     route: graphql-bookinfo
+  #   matchers:
+  #   - uri:
+  #       prefix: /bookinfo-graphql
+  #   graphql:
+  #     schema:
+  #       name: bookinfo-graphql-schema
+  #       namespace: bookinfo
+  #       clusterName: gg-demo-single
+  - name: music-graphql
+    labels:
+      graphql: "true"
+    matchers:
+    - uri:
+        prefix: /music-graphql
+    graphql:
+      schema:
+        name: music-graphql-schema
+        namespace: music
+        clusterName: gg-demo-single
+      options:
+        # Include information about the request an response in the Envoy debug logs,
+        # which can be helpful for debugging GraphQL. Defaults to false.
+        logSensitiveInfo: true

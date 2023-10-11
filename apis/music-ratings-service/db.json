@@ -1,0 +1,74 @@
+{
+    "rating": [
+        {
+            "id": "1",
+            "ratings": {
+                "Reviewer1": 5,
+                "Reviewer2": 4
+            }
+        },
+        {
+            "id": "2",
+            "ratings": {
+                "Reviewer2": 4,
+                "Reviewer3": 2
+            } 
+        },
+        {
+            "id": "3",
+            "ratings": {
+                "Reviewer3": 5,
+                "Reviewer1": 4
+            }
+        },
+        {
+            "id": "4",
+            "ratings": {
+                "Reviewer3": 5,
+                "Reviewer1": 4
+            }
+        },
+        {
+            "id": "5",
+            "ratings": {
+                "Reviewer3": 5,
+                "Reviewer1": 4
+            }
+        },
+        {
+            "id": "6",
+            "ratings": {
+                "Reviewer3": 5,
+                "Reviewer1": 4
+            }
+        },
+        {
+            "id": "7",
+            "ratings": {
+                "Reviewer3": 5,
+                "Reviewer1": 4
+            }
+        },
+        {
+            "id": "8",
+            "ratings": {
+                "Reviewer3": 5,
+                "Reviewer1": 4
+            }
+        },
+        {
+            "id": "9",
+            "ratings": {
+                "Reviewer3": 5,
+                "Reviewer1": 4
+            }
+        },
+        {
+            "id": "10",
+            "ratings": {
+                "Reviewer3": 5,
+                "Reviewer1": 4
+            }
+        }
+    ]
+}

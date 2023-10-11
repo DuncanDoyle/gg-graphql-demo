@@ -1,0 +1,126 @@
+
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: GraphQLResolverMap
+metadata:
+  name: music-resolvers
+  namespace: music
+spec:
+  types:
+    Mutation:
+      fields:
+        setGuitar:
+          resolvers:
+          - restResolver:
+              destinations:
+              - port:
+                  number: 5000
+                ref:
+                  name: music-instruments-service
+                  namespace: music
+              request:
+                headers:
+                  :method:
+                    json: 'POST'
+                  :path:
+                    jq: '"/guitar"'
+                body:
+                  jq: '{"id": .guitarInput.id, "brand": .guitarInput.brand, "model": .guitarInput.model}'
+          variables:
+            guitarInput:
+              graphqlArg: guitar
+    Query:
+      fields:
+        guitarsInfo:
+          resolvers:
+          - restResolver:
+              destinations:
+              - port:
+                  number: 5000
+                ref:
+                  name: music-instruments-service
+                  namespace: music
+              request:
+                headers:
+                  :path:
+                    jq: '"/guitar"'
+        guitarInfo:
+          resolvers:
+          - restResolver:
+              destinations:
+              - port:
+                  number: 5000
+                ref:
+                  name: music-instruments-service
+                  namespace: music
+              request:
+                headers:
+                  :path:
+                    jq: '"/guitar/" + .guitarId'
+          variables:
+            guitarId:
+              graphqlArg: id
+        instrumentsInfo:
+          resolvers:
+          - restResolver:
+              destinations:
+              - port:
+                  number: 5000
+                ref:
+                  name: music-ratings-service
+                  namespace: music
+              request:
+                headers:
+                  :path:
+                    jq: '"/rating/1"'
+    Instruments:
+      fields:
+        guitars:
+          resolvers:
+          - restResolver:
+              destinations:
+              - port:
+                  number: 5000
+                ref:
+                  name: music-instruments-service
+                  namespace: music
+              request:
+                headers:
+                  :path:
+                    jq: '"/guitar"'
+        drums:
+          resolvers:
+          - restResolver:
+              destinations:
+              - port:
+                  number: 5000
+                ref:
+                  name: music-instruments-service
+                  namespace: music
+              request:
+                headers:
+                  :path:
+                    jq: '"/drum"'
+    Guitar:
+      fields:
+        ratings:
+          variables:
+            parentVar:
+              graphqlParent: {}
+            resolverResultVar:
+              resolverResult: {}
+          resolvers:
+          - restResolver:
+              destinations:
+              - port:
+                  number: 5000
+                ref:
+                  name: music-ratings-service
+                  namespace: music
+              request:
+                headers:
+                  :path:
+                    jq: '"/rating/" + (.parentVar.id | tostring)'
+              timeout: "2s" 
+            resolverResultTransform:
+              jq: '.resolverResultVar.ratings | to_entries | map(.reviewer=.key | .numStars=.value | del(.key,.value))'
+            

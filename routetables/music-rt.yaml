@@ -1,0 +1,59 @@
+apiVersion: networking.gloo.solo.io/v2
+kind: RouteTable
+metadata:
+  name: music-rt
+  namespace: gloo-mesh-gateways
+  labels:
+     portal: dev-portal
+     api: music
+spec:
+  portalMetadata:
+    apiProductId: Music
+    apiVersion: "1.0"
+    title: Music REST API
+    description: Totally awesome API for all things music!
+    contact: musicstore-support@solo.io
+  http:
+  - name: instruments
+    labels:
+      usagePlans: dev-portal
+      cors-policy: api
+    matchers:
+    - uri:
+        prefix: /instruments/
+    forwardTo:
+      pathRewrite: /
+      destinations:
+      - ref:
+          name: music-instruments-service
+          namespace: music
+        port:
+          number: 5000
+  - name: ratings
+    labels:
+      usagePlans: dev-portal
+      cors-policy: api
+    matchers:
+    - uri:
+        prefix: /rating
+    forwardTo:
+      pathRewrite: /rating
+      destinations:
+      - ref:
+          name: music-ratings-service
+          namespace: music
+        port:
+          number: 5000
+  - name: music-graphql
+    labels:
+      graphql: "true"
+    matchers:
+    - uri:
+        prefix: /music-graphql
+    graphql:
+      schema:
+        name: music-graphql-schema
+        namespace: music
+        clusterName: gg-demo-single
+      options:
+        logSensitiveInfo: true

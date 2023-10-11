@@ -1,0 +1,4 @@
+{
+    "/api/menus/v1/menus/menudeal": "/menudeal",
+    "/api/menus/v1/menus/menudeal/:id": "/menudeal/:id"
+}

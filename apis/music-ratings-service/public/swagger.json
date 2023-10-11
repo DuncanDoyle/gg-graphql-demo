@@ -1,0 +1,79 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Music Ratings Service.",
+    "version": "1.0.0",
+    "title": "Music Ratings Service"
+  },
+  "tags": [
+    {
+      "name": "Music Rating",
+      "description": "Music Rating."
+    }
+  ],
+  "paths": {
+    "/rating": {
+      "get": {
+        "tags": ["Music Rating"],
+        "summary": "Retrieves a rating of a musical instrument.",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful. Returns an array of ratings of musical instruments.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Ratings"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/guitar/{id}": {
+      "get": {
+        "tags": ["Music Rating"],
+        "summary": "Retrieves a rating of a muical instrument by ID",
+        "description": "Returns a review",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Instrument ID",
+            "required": true,
+            "type": "string",
+            "example": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful. Returns ratings for this particular instrument.",
+            "schema": {
+              "$ref": "#/definitions/Ratings"
+            }
+          },
+          "404": {
+            "description": "Guitar not found."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Ratings": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "reviews": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

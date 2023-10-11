@@ -1,0 +1,17 @@
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: GraphQLSchema
+metadata:
+  name: music-graphql-schema
+  namespace: music
+spec:
+  resolved:
+    options: 
+      enableIntrospection: true
+    resolverMapRefs:
+    - name: music-resolvers
+      namespace: music
+      clusterName: gg-demo-single
+  schemaRef:
+    name: music-sdl
+    namespace: music
+    clusterName: gg-demo-single

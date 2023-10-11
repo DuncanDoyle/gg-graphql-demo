@@ -1,0 +1,12 @@
+apiVersion: resilience.policy.gloo.solo.io/v2
+kind: GraphQLPersistedQueryCachePolicy
+metadata:
+  name: bookinfo-graphql-query-cache
+  namespace: bookinfo
+spec:
+  applyToRoutes:
+  - route:
+      labels:
+        route: graphql-bookinfo
+  config:
+    cacheSize: 1000

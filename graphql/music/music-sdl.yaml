@@ -1,0 +1,56 @@
+
+apiVersion: apimanagement.gloo.solo.io/v2
+kind: ApiDoc
+metadata:
+  name: music-sdl
+  namespace: music
+spec:
+  graphql:
+    schemaDefinition: |-
+      type Mutation {
+        setGuitar(guitar: GuitarInput): Guitar
+      }
+
+      type Query @cacheControl(maxAge: 60) {
+        """Description of a musical instrument"""
+        guitarsInfo: [Guitar] 
+        guitarInfo(id: String!): Guitar
+        instrumentsInfo: Instruments
+      }
+
+      """Each guitar has a product entry"""
+      type Guitar {
+      """Unique identifier for the guitar"""
+      id: String
+      """The guitar brand"""
+      brand: String
+      """The guitar model"""
+      model: String
+      """List of ratings for this instrument. Queries the ratings REST service"""
+      ratings: [Rating] 
+      }
+      
+      """An instrument rating"""
+      type Rating {
+        """Name of the user peforming the rating"""
+        reviewer: String
+        """Number of stars for this rating"""
+        numStars: Int
+      }
+
+      input GuitarInput {
+        id: String
+        brand: String
+        model: String
+      }
+
+      type Instruments {
+        guitars: [Guitar]
+        drums: [Drum]
+      }
+
+      type Drum {
+        id: String
+        brand: String
+        model: String
+      }

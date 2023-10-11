@@ -7,11 +7,6 @@ metadata:
      portal: dev-portal
      api: bookinfo
 spec:
-  hosts:
-  - api.example.com
-  virtualGateways:
-  - name: istio-ingressgateway
-    namespace: gloo-mesh-gateways
   portalMetadata:
     apiProductId: Bookinfo
     apiVersion: "1.0"
@@ -27,7 +22,7 @@ spec:
     - uri:
         prefix: /details
     forwardTo:
-      # pathRewrite: /
+      pathRewrite: /details
       destinations:
       - ref:
           name: details
@@ -42,7 +37,7 @@ spec:
     - uri:
         prefix: /ratings
     forwardTo:
-      # pathRewrite: /
+      pathRewrite: /ratings
       destinations:
       - ref:
           name: ratings
@@ -57,7 +52,7 @@ spec:
     - uri:
         prefix: /reviews
     forwardTo:
-      # pathRewrite: /
+      pathRewrite: /reviews
       destinations:
       - ref:
           name: reviews

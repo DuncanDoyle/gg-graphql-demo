@@ -5,7 +5,7 @@ metadata:
   namespace: gloo-mesh-gateways
   labels:
      portal: dev-portal
-     api: bookinfo
+     api: productpage
 spec:
   hosts:
   - productpage.example.com

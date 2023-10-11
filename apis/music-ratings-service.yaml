@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: "music-ratings-service"
+  name: "music-ratings-service"
+  namespace: music
+spec:
+  selector:
+    matchLabels:
+      app: "music-ratings-service"
+      version: 1.0.0
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "music-ratings-service"
+        version: 1.0.0
+    spec:
+      containers:
+      - image: "music-ratings-service:1.0.0"
+        imagePullPolicy: IfNotPresent
+        name: music-ratings-service
+        command: ["json-server"]
+        args: ["--host", "0.0.0.0", "--port", "5000", "--delay", "10", "db.json"]
+        ports:
+        - containerPort: 5000
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    gloo.solo.io/scrape-openapi-source: /swagger.json
+    gloo.solo.io/scrape-openapi-retry-delay: "5s"
+    gloo.solo.io/scrape-openapi-pull-attempts: "3"
+    gloo.solo.io/scrape-openapi-use-backoff: "true"
+  name: "music-ratings-service"
+  namespace: music
+  labels:
+    app: "music-ratings-service"
+spec:
+  ports:
+  - port: 5000
+    protocol: TCP
+  selector:
+    app: "music-ratings-service"

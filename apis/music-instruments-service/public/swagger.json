@@ -1,0 +1,144 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Music Instruments Service.",
+    "version": "1.0.0",
+    "title": "Music Instruments REST Service"
+  },
+  "tags": [
+    {
+      "name": "Music",
+      "description": "Music."
+    },
+    {
+      "name": "Guitar",
+      "description": "String instrument"
+    }
+  ],
+  "paths": {
+    "/guitar": {
+      "get": {
+        "tags": ["Guitar"],
+        "summary": "Retrieves a list of guitars",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful. Returns an array of Guitar objects.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Guitar"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/guitar/{id}": {
+      "get": {
+        "tags": ["Guitar"],
+        "summary": "Find a guitar by ID",
+        "description": "Returns a guitar",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Guitar ID",
+            "required": true,
+            "type": "string",
+            "example": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful. Returns a single guitar.",
+            "schema": {
+              "$ref": "#/definitions/Guitar"
+            }
+          },
+          "404": {
+            "description": "Guitar not found."
+          }
+        }
+      }
+    },
+    "/drum": {
+        "get": {
+          "tags": ["Drum"],
+          "summary": "Retrieves a list of drums",
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "Successful. Returns an array of Drum objects.",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Drum"
+                }
+              }
+            }
+          }
+        }
+    },
+    "/drum/{id}": {
+      "get": {
+        "tags": ["Drum"],
+        "summary": "Find a drum by ID",
+        "description": "Returns a drum",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Drum ID",
+            "required": true,
+            "type": "string",
+            "example": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful. Returns a single drum.",
+            "schema": {
+              "$ref": "#/definitions/Drum"
+            }
+          },
+          "404": {
+            "description": "Drum not found."
+          }
+        }
+      }  
+    }
+  },
+  "definitions": {
+    "Guitar": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "brand": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        }
+      }
+    },
+    "Drum": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "brand": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
