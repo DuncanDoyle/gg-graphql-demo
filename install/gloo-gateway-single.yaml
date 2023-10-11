@@ -15,12 +15,56 @@ glooUi:
   enabled: true
 istioInstallations:
   enabled: true
+  # Add istioOperatorSpec configuration to add Pod annotations to the ingressgateway to expose GraphQL metrics via Envoy stats.
+  northSouthGateways:
+    - enabled: true
+      name: istio-ingressgateway
+      installations:
+        - clusters:
+          gatewayRevision: auto
+          istioOperatorSpec:
+            components:
+              ingressGateways:
+              - enabled: true
+                name: istio-ingressgateway
+                namespace: gloo-mesh-gateways
+                k8s:
+                  podAnnotations:
+                      proxy.istio.io/config: |-
+                        proxyStatsMatcher:
+                          inclusionRegexps:
+                          - ".*graphql.*"
+            # meshConfig:
+            #   defaultConfig:
+            #     proxyStatsMatcher:
+            #       inclusionRegexps:
+            #       - ".*graphql.*"
+          # name: istio-ingressgateway
 telemetryCollector:
   enabled: true
   config:
     exporters:
       otlp:
         endpoint: gloo-telemetry-gateway.gloo-mesh:4317
+telemetryCollectorCustomization:
+  # Add extra processors and pipelines to process GraphQL metrics and put them in Prometheus.
+  extraProcessors:
+    filter/graphql:
+      metrics:
+        include:
+          match_type: regexp
+          metric_names:
+            - .*graphql.*
+  extraPipelines:
+      metrics/graphql:
+        receivers:
+        - prometheus
+        processors:
+        - memory_limiter
+        - filter/graphql
+        - batch
+        exporters:
+        - otlp
 prometheus:
   enabled: true
 redis:
